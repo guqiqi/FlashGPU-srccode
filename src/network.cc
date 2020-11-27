@@ -80,7 +80,7 @@ void flit_c::init(void) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-credit_c::credit_c() {}
+credit_c::credit_c() {} 
 
 credit_c::~credit_c() {}
 

@@ -55,6 +55,9 @@ void simplessd_interface_c::init(int id) {
   m_id = id;
 }
 
+/**
+ * kiki: Send a packet to the NoC
+ */
 void simplessd_interface_c::send(void) {
   bool req_type_checked[2];
   req_type_checked[0] = false;
@@ -112,6 +115,9 @@ void simplessd_interface_c::send(void) {
   }
 }
 
+/**
+  * kiki: Receive a packet from the NoC
+  */
 void simplessd_interface_c::receive(void) {
   // check router queue every cycle
   mem_req_s *req = NETWORK->receive(MEM_MC, m_id);
@@ -121,16 +127,21 @@ void simplessd_interface_c::receive(void) {
     request.reqID = req->m_id;
     request.offset = req->m_addr % logicalPageSize;
     request.length = req->m_size;
+    // kiki: logical page index ---- start logic page number
     request.range.slpn = req->m_addr / logicalPageSize;
+    // kiki: next logic page number
     request.range.nlp = (req->m_size + request.offset + logicalPageSize - 1) /
                         logicalPageSize;
   
+    // kiki: time to cost when finishing the request
     uint64_t finishTick =
         static_cast<unsigned long long>(m_cycle * 1000 / clock_freq); 
+    // kiki: do nothing but to check the range of request.range.slpn.
     pHIL->checkAvailableTime(request, finishTick);
     if (finishTick <= static_cast<unsigned long long>(m_cycle * 1000 / clock_freq))
+      // kiki: insert a request to output buffer
       insert_new_req(req);
-    else{
+    else{ // kiki: do not know how to get into this situation
       finishTick = finishTick * clock_freq / 1000;
       while (1){
         auto iter = m_input_buffer->find(finishTick);
@@ -194,6 +205,7 @@ bool simplessd_interface_c::insert_new_req(mem_req_s *mem_req) {
   request.pc = mem_req->m_pc;
   request.thread_id = mem_req->m_thread_id;
 
+  // kiki: tick of m_cycle
   uint64_t finishTick =
       static_cast<unsigned long long>(m_cycle * 1000 / clock_freq);
 
@@ -204,19 +216,26 @@ bool simplessd_interface_c::insert_new_req(mem_req_s *mem_req) {
   SimpleSSD::Logger::info("Request arrived at %lu cycle (%" PRIu64 " ps)",
                           m_cycle, finishTick);
 
+  // TODO what is the purpose
   if (mem_req->m_dirty)
+  // kiki: need to write back, TODO
     pHIL->write(request, finishTick);
   else
     pHIL->read(request, finishTick);
 
+  // kiki: finishTick equals the value of m_cycle
   finishTick = finishTick * clock_freq / 1000 ;
   SimpleSSD::Logger::info("Request finished at %lu cycle, delay %d cycle", 
                                     finishTick, finishTick - m_cycle);
+  
+  // kiki: if type of req is write back, free the req. 
+  //       else add a req to the output buffer.
   if (mem_req->m_type == MRT_WB){
     MEMORY->free_req(mem_req->m_core_id, mem_req);     
   }
   else{
     while (1){
+      // kiki: map.find finishTick is the first para of the map ---- cycle
       auto iter = m_output_buffer->find(finishTick);
       if (iter != m_output_buffer->end()) finishTick++;
       else break;
