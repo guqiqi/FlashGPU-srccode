@@ -80,7 +80,7 @@ using namespace std;
 
 unsigned int getInstructionCount();
 unsigned int getPseudoRetiredInstructionCount();
-unsigned int getCycleCount();
+unsigned int getCycleCount(macsim_c *simBase);
 void init_per_core_stats(unsigned num_cores, macsim_c *simBase);
 
 ofstream *getOutputStream(const string &filename);

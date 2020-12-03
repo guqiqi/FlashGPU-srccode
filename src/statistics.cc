@@ -116,8 +116,8 @@ unsigned int getPseudoRetiredInstructionCount() {
   return 1200;
 }
 
-unsigned int getCycleCount() {
-  return 20000;
+unsigned int getCycleCount(macsim_c *m_simBase) {
+  return m_simBase->m_simulation_cycle;
 }
 
 // initialize core stats
@@ -255,7 +255,7 @@ void GlobalStatistics::saveStats(string ext) {
           stream << setw(20) << "Cumulative:" << setw(10) << "Cycles:  ";
 
           stream.setf(ios::right, ios::adjustfield);
-          stream << setw(20) << getCycleCount();
+          stream << setw(20) << getCycleCount(m_simBase);
 
           stream.setf(ios::left, ios::adjustfield);
           stream << setw(20) << "     Instructions:";

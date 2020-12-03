@@ -781,6 +781,7 @@ void macsim_c::init_clock_domain(void) {
   CLOCK_MC = m_num_sim_cores + 2;
 
   m_clock_internal = 0;
+  // kiki: store different frequency for CPU, GPU, NOC, L3, MC
   float domain_f[5];
   domain_f[0] = *KNOB(KNOB_CLOCK_CPU);
   domain_f[1] = *KNOB(KNOB_CLOCK_GPU);
@@ -809,7 +810,7 @@ void macsim_c::init_clock_domain(void) {
       break;
     }
   }
-
+  // kiki: first n sim core + L3 NOC MC
   m_domain_freq = new int[3 + m_num_sim_cores];
   m_domain_count = new int[3 + m_num_sim_cores];
   m_domain_next = new int[3 + m_num_sim_cores];
