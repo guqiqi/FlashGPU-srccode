@@ -128,7 +128,7 @@ void init_per_core_stats(unsigned num_cores, macsim_c *simBase) {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // dump out all stats to the file
-void DIST_Stat::writeTo(ofstream &stream) {
+void DIST_Stat::writeTo(ofstream &stream, macsim_c *m_simBase) {
   vector<long>::iterator iter = m_distributionMembers.begin();
   vector<long>::iterator end = m_distributionMembers.end();
 
@@ -267,7 +267,7 @@ void GlobalStatistics::saveStats(string ext) {
         }
 
         stream << setfill(' ');
-        pStat->writeTo(stream);
+        pStat->writeTo(stream, m_simBase);
       }
     }
 
@@ -286,7 +286,7 @@ void GlobalStatistics::saveStats(string ext) {
     ofstream *pStream = getOutputStream(filename, m_simBase);
     if (NULL != pStream) {
       ofstream &stream = (*pStream);
-      pDistribution->writeTo(stream);
+      pDistribution->writeTo(stream, m_simBase);
     }
 
     iter2++;
@@ -304,7 +304,7 @@ void GlobalStatistics::writeTo(ofstream &stream) {
     // they belong to
     if (false == pStat->memberOfDistribution()) {
       stream << "GS ## ";
-      pStat->writeTo(stream);
+      pStat->writeTo(stream, m_simBase);
     }
 
     iter++;
@@ -337,7 +337,7 @@ void CoreStatistics::saveStats(string ext) {
     // ignore distribution members, they will be printed by
     // the distributions they belong to
     if (false == pStat->memberOfDistribution()) {
-      pStat->writeTo(stream);
+      pStat->writeTo(stream, m_simBase);
     }
 
     iter++;
@@ -355,7 +355,7 @@ void CoreStatistics::saveStats(string ext) {
     ofstream *pStream = getOutputStream(filename, m_simBase);
     if (NULL != pStream) {
       ofstream &stream = (*pStream);
-      pDistribution->writeTo(stream);
+      pDistribution->writeTo(stream, m_simBase);
     }
 
     iter2++;

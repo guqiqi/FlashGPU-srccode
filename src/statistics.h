@@ -185,7 +185,7 @@ class AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     string name = m_name;
     name.append(m_suffix);
     stream.setf(ios::left, ios::adjustfield);
@@ -345,7 +345,7 @@ class DIST_Stat : public AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream);
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase);
 
  private:
   ProcessorStatistics
@@ -382,7 +382,7 @@ class PER_INST_Stat : public AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     unsigned int numInstructions = getInstructionCount();
     per_inst_value = (float)m_count / numInstructions;
     string name = m_name;
@@ -430,8 +430,8 @@ class PER_CYCLE_Stat : public AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
-    unsigned int cycleCount = getCycleCount();
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
+    unsigned int cycleCount = getCycleCount(m_simBase);
     if (cycleCount > 0) {
       string name = m_name;
       name.append(m_suffix);
@@ -492,7 +492,7 @@ class RATIO_Stat : public AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     unsigned int refValue = 0;
     string refName = "";
 
@@ -570,7 +570,7 @@ class PERCENT_Stat : public AbstractStat {
   /**
    * Dump out all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     unsigned int refValue = 0;
     string refName = "";
 
@@ -648,7 +648,7 @@ class PER_1000_INST_Stat : public AbstractStat {
   /**
    * Dump all stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     unsigned int numInstructions = getInstructionCount();
     float ratio = (float)m_count / (float)numInstructions;
     per_1000_inst_value = 1000 * ratio;
@@ -698,7 +698,7 @@ class PER_1000_PRET_INST_Stat : public AbstractStat {
   /**
    * Dump stats to the file.
    */
-  virtual void writeTo(ofstream &stream) {
+  virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
     unsigned int PRET = getPseudoRetiredInstructionCount();
     float ratio = (float)m_count / (float)PRET;
     per_1000_pret_inst_value = 1000 * ratio;
