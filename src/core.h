@@ -319,6 +319,8 @@ class core_c {
     m_max_threads_per_core = thread_num;
   }
 
+  Counter get_inst_count() { return m_inst_count; }
+
   /**
    * Initialize core
    */

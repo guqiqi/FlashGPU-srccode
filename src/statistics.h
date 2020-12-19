@@ -78,7 +78,7 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int getInstructionCount();
+unsigned int getInstructionCount(macsim_c *simBase);
 unsigned int getPseudoRetiredInstructionCount();
 unsigned int getCycleCount(macsim_c *simBase);
 void init_per_core_stats(unsigned num_cores, macsim_c *simBase);
@@ -383,7 +383,7 @@ class PER_INST_Stat : public AbstractStat {
    * Dump out all stats to the file.
    */
   virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
-    unsigned int numInstructions = getInstructionCount();
+    unsigned int numInstructions = getInstructionCount(m_simBase);
     per_inst_value = (float)m_count / numInstructions;
     string name = m_name;
     name.append(m_suffix);
@@ -649,7 +649,7 @@ class PER_1000_INST_Stat : public AbstractStat {
    * Dump all stats to the file.
    */
   virtual void writeTo(ofstream &stream, macsim_c *m_simBase) {
-    unsigned int numInstructions = getInstructionCount();
+    unsigned int numInstructions = getInstructionCount(m_simBase);
     float ratio = (float)m_count / (float)numInstructions;
     per_1000_inst_value = 1000 * ratio;
 

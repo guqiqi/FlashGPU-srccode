@@ -108,8 +108,8 @@ AbstractStat &getCoreWideStat(int coreID, long statID,
   return pStat;
 }
 
-unsigned int getInstructionCount() {
-  return 1200;
+unsigned int getInstructionCount(macsim_c *simBase) {
+  return simBase->m_core0_inst_count*simBase->m_all_threads;
 }
 
 unsigned int getPseudoRetiredInstructionCount() {
@@ -261,7 +261,7 @@ void GlobalStatistics::saveStats(string ext) {
           stream << setw(20) << "     Instructions:";
 
           stream.setf(ios::right, ios::adjustfield);
-          stream << setw(20) << getInstructionCount();
+          stream << setw(20) << getInstructionCount(m_simBase);
 
           stream << endl;
         }
