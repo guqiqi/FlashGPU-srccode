@@ -36,7 +36,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************************************/
 
 #include "dram.h"
+#include "simplessd/util/def.hh"
 
 dram_c::dram_c(macsim_c *simBase) : m_simBase(simBase) {}
 
 dram_c::~dram_c() {}
+
+void dram_c::getStats(std::vector<SimpleSSD::_Stats> &list, std::vector<uint64_t> &values){}

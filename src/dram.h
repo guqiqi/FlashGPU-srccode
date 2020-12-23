@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DRAM_H
 
 #include "macsim.h"
+#include "simplessd/util/def.hh"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Memory controller base class
@@ -69,6 +70,11 @@ class dram_c {
    * Tick a cycle
    */
   virtual void run_a_cycle(bool) = 0;
+
+  /**
+   * Append Stats to the macsim global stats
+   */
+  virtual void getStats(std::vector<SimpleSSD::_Stats> &list, std::vector<uint64_t> &values);
 
  protected:
   /**

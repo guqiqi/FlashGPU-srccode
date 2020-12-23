@@ -45,6 +45,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "macsim.h"
 #include "statistics.h"
 
+#include "simplessd/util/def.hh"
+#include "simplessd_interface.h"
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

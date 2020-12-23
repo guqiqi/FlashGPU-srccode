@@ -15,6 +15,7 @@
 #include "simplessd_interface.h"
 
 #include "simplessd/log/log.hh"
+#include "simplessd/util/def.hh"
 
 #define DEBUG(args...) _DEBUG(*m_simBase->m_knobs->KNOB_DEBUG_DRAM, ##args)
 
@@ -269,4 +270,9 @@ void simplessd_interface_c::print_req(void) {
   fclose(fp);
 
   //  g_memory->print_mshr();
+}
+
+void simplessd_interface_c::getStats(std::vector<SimpleSSD::_Stats> &list, std::vector<uint64_t> &values){
+  pHIL->getStats(list);
+  pHIL ->getStatValues(values);
 }

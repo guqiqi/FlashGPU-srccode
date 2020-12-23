@@ -16,6 +16,7 @@
 #include "macsim.h"
 
 #include "simplessd/hil/hil.hh"
+#include "simplessd/util/def.hh"
 
 class simplessd_interface_c : public dram_c {
  public:
@@ -27,6 +28,7 @@ class simplessd_interface_c : public dram_c {
   void receive(void);
   void print_req(void);
   bool insert_new_req(mem_req_s *);
+  void getStats(std::vector<SimpleSSD::_Stats> &list, std::vector<uint64_t> &values);
 
  private:
   SimpleSSD::ConfigReader configReader;

@@ -423,8 +423,12 @@ class all_stats_c {
   RATIO_Stat *m_L1_WB;
   RATIO_Stat *m_L2_WB;
   RATIO_Stat *m_L3_WB;
+  COUNT_Stat *m_CACHE_WRITE_TOTAL;
+  RATIO_Stat *m_CACHE_WRITE_HIT;
   COUNT_Stat *m_TOTAL_DRAM;
   RATIO_Stat *m_TOTAL_DRAM_MERGE;
+  COUNT_Stat *m_CACHE_READ_TOTAL;
+  RATIO_Stat *m_CACHE_READ_HIT;
   COUNT_Stat *m_L1_HIT_CPU;
   COUNT_Stat *m_L1_HIT_GPU;
   COUNT_Stat *m_L1_MISS_CPU;

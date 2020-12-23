@@ -69,6 +69,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "all_stats.h"
 #include "statistics.h"
 
+#include "simplessd/util/def.hh"
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,7 +783,7 @@ void macsim_c::init_clock_domain(void) {
   CLOCK_MC = m_num_sim_cores + 2;
 
   m_clock_internal = 0;
-  // kiki: store different frequency for CPU, GPU, NOC, L3, MC
+  // kiki: store different frequency for CPU, GPU, L3, NOC, MC
   float domain_f[5];
   domain_f[0] = *KNOB(KNOB_CLOCK_CPU);
   domain_f[1] = *KNOB(KNOB_CLOCK_GPU);
@@ -1045,7 +1047,22 @@ int macsim_c::run_a_cycle() {
 // Simulation end cleanup
 // =======================================
 void macsim_c::finalize() {
-  // deallocate memory
+  std::vector<SimpleSSD::_Stats> list;
+  std::vector<uint64_t> values;
+  m_dram_controller[0]->getStats(list, values);
+
+  if(list.size() > 0){
+    for (int i = 0; i<list.size(); ++i)
+    {
+      cout << list[i].name << "	" << list[i].desc << " " << values[i] << endl;
+    }
+
+    STAT_EVENT_N(CACHE_WRITE_TOTAL, values[11]);
+    STAT_EVENT_N(CACHE_WRITE_HIT, values[12]);
+    STAT_EVENT_N(CACHE_READ_TOTAL, values[9]);
+    STAT_EVENT_N(CACHE_READ_HIT, values[10]);
+  }
+
   deallocate_memory();
 
   // finalize simulation
